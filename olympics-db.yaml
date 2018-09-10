@@ -23,7 +23,7 @@ spec:
          emptyDir:
            medium: Memory    
       containers:
-      - image: eugeneflexagon/olympics-db
+      - image: ${{DOCKER_IMAGE}}:${{FD_PROJECT_VERSION}}
         volumeMounts:
            - mountPath: /dev/shm
              name: dshm
