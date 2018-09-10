@@ -1,0 +1,57 @@
+
+
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: olympics-db
+  namespace: efedorenko
+  labels:
+    run: olympics-db
+spec:
+  selector:
+      matchLabels:
+        run: olympics-db
+  serviceName: "olympics-db-svc"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: olympics-db
+    spec:
+      volumes:
+       - name: dshm
+         emptyDir:
+           medium: Memory    
+      containers:
+      - image: eugeneflexagon/olympics-db
+        volumeMounts:
+           - mountPath: /dev/shm
+             name: dshm
+           - mountPath: /u01/app/oracle/oradata
+             name: db             
+        imagePullPolicy: Always
+        name: olympics-db
+        ports:
+        - containerPort: 1521
+          protocol: TCP
+  volumeClaimTemplates:
+   - metadata:
+       name: db
+     spec:
+       accessModes: [ "ReadWriteOnce" ]
+       resources:
+         requests:
+           storage: 100M          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: olympics-db-svc
+  namespace: efedorenko
+spec:
+  selector:
+    run: olympics-db
+  ports:
+    - port: 1521
+      targetPort: 1521
+  clusterIP: None
