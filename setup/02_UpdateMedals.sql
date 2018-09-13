@@ -1,5 +1,5 @@
 update fd.medals
-set bronze = 15
+set bronze = 11
 where countryId = 'no'
 /
 commit
