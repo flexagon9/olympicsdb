@@ -7,6 +7,7 @@ metadata:
   namespace: efedorenko
   labels:
     run: olympics-db
+    delta: a
 spec:
   selector:
       matchLabels:
@@ -23,7 +24,7 @@ spec:
          emptyDir:
            medium: Memory    
       containers:
-      - image: ${{DOCKER_IMAGE}}:latest
+      - image: eugeneflexagon/olympics-db:latest
         volumeMounts:
            - mountPath: /dev/shm
              name: dshm
