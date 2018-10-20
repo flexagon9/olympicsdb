@@ -3,28 +3,28 @@
 apiVersion: apps/v1beta2
 kind: StatefulSet
 metadata:
-  name: olympics-db
+  name: olympics-dsh-db
   namespace: efedorenko
   labels:
-    run: olympics-db
-    delta: a
+    run: olympics-dsh-db
+    delta: f
 spec:
   selector:
       matchLabels:
-        run: olympics-db
-  serviceName: "olympics-db-svc"
+        run: olympics-dsh-db
+  serviceName: "olympics-dsh-db-svc"
   replicas: 1
   template:
     metadata:
       labels:
-        run: olympics-db
+        run: olympics-dsh-db
     spec:
       volumes:
        - name: dshm
          emptyDir:
            medium: Memory    
       containers:
-      - image: eugeneflexagon/olympics-db:latest
+      - image: eugeneflexagon/olympics-dsh-db:latest
         volumeMounts:
            - mountPath: /dev/shm
              name: dshm
@@ -37,11 +37,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: olympics-db-svc
+  name: olympics-dsh-db-svc
   namespace: efedorenko
+  labels:
+    run: olympics-dsh-db
+    delta: f
 spec:
   selector:
-    run: olympics-db
+    run: olympics-dsh-db
   ports:
     - port: 1521
       targetPort: 1521
